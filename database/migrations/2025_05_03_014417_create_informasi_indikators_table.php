@@ -11,20 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('evaluasi_indikators', function (Blueprint $table) {
+        Schema::create('informasi_indikators', function (Blueprint $table) {
             $table->id();
-            $table->integer('indeks');
+            $table->float('indeks');
 
             // $table->unsignedBigInteger('tahun');
             // $table->foreignId('tahun')->constrained()->cascadeOnDelete();
 
-            $table->unsignedBigInteger('tahun_id');
-            $table->foreign('tahun_id')->references('tahun')->on('evaluasi_tahuns')->onDelete('cascade');
+            $table->unsignedBigInteger('tahun');
+            $table->foreign('tahun')->references('tahun')->on('evaluasi_tahuns')->onDelete('cascade');
         
             $table->unsignedBigInteger('urutan_indikator');
             // $table->foreignId('urutan_indikator')->constrained()->cascadeOnDelete();
             $table->foreign('urutan_indikator')->references('urutan_indikator')->on('indikators')->onDelete('cascade');
-        
+            $table->foreignId('admin_dinas_id')->constrained('admin_dinas')->cascadeOnDelete();
+
+            // tambahan chatgpt ini nda paham pka
+            $table->unique(['urutan_indikator', 'tahun']); 
+
             $table->integer('jumlah_dokumen'); 
             $table->timestamps();
         });
@@ -35,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('evaluasi_indikators');
+        Schema::dropIfExists('informasi_indikators');
     }
 };

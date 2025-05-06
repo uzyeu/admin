@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('evaluasi_tahuns', function (Blueprint $table) {
             $table->unsignedBigInteger('tahun')->primary();
-            $table->boolean('indeks_akumulasi');
+            $table->float('indeks_akumulasi');
             $table->timestamps();
             // $table->foreignId('indikator_id')->constrained('indikators')->onDelete('cascade');
             // $table->primary(['tahun', 'indikator_id']); // Composite Primary Key

@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('indikators', function (Blueprint $table) {
             $table->unsignedBigInteger('urutan_indikator')->primary();
-            $table->text('deskripsi');
             $table->string('nama_indikator');
-            $table->string('data_pendukung');
+            $table->text('deskripsi');
+            $table->foreignId('admin_dinas_id')->constrained('admin_dinas')->cascadeOnDelete();
+            // $table->string('data_pendukung');
             $table->timestamps();
-            $table->boolean('status_update');
+            // $table->boolean('status_update');
         });
     }
 
