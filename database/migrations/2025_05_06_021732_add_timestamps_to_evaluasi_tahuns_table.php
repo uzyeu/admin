@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('evaluasi_indikators', function (Blueprint $table) {
-            $table->id();
-            $table->integer('indeks');
+        Schema::table('evaluasi_tahuns', function (Blueprint $table) {
+            //
+            $table->timestamps();
         });
     }
 
@@ -22,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('evaluasi_indikators');
+        Schema::table('evaluasi_tahuns', function (Blueprint $table) {
+            //
+        });
     }
 };

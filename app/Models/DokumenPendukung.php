@@ -11,4 +11,10 @@ class DokumenPendukung extends Model
         'dokumen_pendukung', // Tambahkan ini
         // tambahkan field lain yang kamu izinkan untuk diisi
     ];
+        // App\Models\DokumenPendukung.php
+        public function indikator()
+        {
+        return $this->belongsTo(\App\Models\Indikator::class, 'indikator_id', 'urutan_indikator');
+        }
+
 }

@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id(); // Tambahkan ID sebagai primary key
             $table->string('file')->nullable(); // Kolom untuk nama/path file
             $table->foreignId('admin_dinas_id')->constrained()->cascadeOnDelete(); // Relasi ke admin_dinas
+            $table->unsignedBigInteger('urutan_indikator');
+         
+            $table->foreign('urutan_indikator')->references('urutan_indikator')->on('indikators')->onDelete('cascade');
+     
             $table->timestamps(); // created_at dan updated_at
         });
     }

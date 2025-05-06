@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('evaluasi_tahuns', function (Blueprint $table) {
-            $table->id('tahun');
+            $table->unsignedBigInteger('tahun')->primary();
             $table->boolean('indeks_akumulasi');
+            $table->timestamps();
+            // $table->foreignId('indikator_id')->constrained('indikators')->onDelete('cascade');
+            // $table->primary(['tahun', 'indikator_id']); // Composite Primary Key
         });
     }
 

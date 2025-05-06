@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('indikators', function (Blueprint $table) {
-            $table->id('urutan_indikator');
+            $table->unsignedBigInteger('urutan_indikator')->primary();
             $table->text('deskripsi');
             $table->string('nama_indikator');
             $table->string('data_pendukung');
