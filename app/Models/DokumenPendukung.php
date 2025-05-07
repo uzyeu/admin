@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class DokumenPendukung extends Model
 {
     //
+    public function indikator()
+    {
+        return $this->belongsTo(Indikator::class, 'urutan_indikator', 'urutan_indikator'); // sesuaikan kolom foreign key dan primary key
+    }
+
     protected $fillable = [
         'dokumen_pendukung', // Tambahkan ini
         // tambahkan field lain yang kamu izinkan untuk diisi

@@ -11,41 +11,24 @@ class GrafikJumlahDokumenPerTahun extends BarChartWidget
     protected static ?string $heading = 'Jumlah Dokumen per Indikator';
     protected static ?int $sort = 2;
 
-    public ?string $tahun = null;
+    protected static string $chartId = 'grafik-dokumen-indikator';
 
-    protected function getFormSchema(): array
-    {
-        return [
-            Select::make('tahun')
-                ->label('Pilih Tahun')
-                ->options($this->getAvailableYears())
-                ->default(date('Y'))
-                ->reactive()
-        ];
-    }
-
-    protected function getAvailableYears(): array
-    {
-        return DokumenPendukung::selectRaw('YEAR(created_at) as tahun')
-            ->distinct()
-            ->orderBy('tahun', 'desc')
-            ->pluck('tahun', 'tahun')
-            ->toArray();
-    }
-
+    // Ambil filter dari dashboard (misalnya 'tahun')
     protected function getData(): array
     {
-        $tahun = $this->getFilters('tahun') ?? date('Y');
-    
+        // Ambil filter tahun dari dashboard, jika tidak ada pakai tahun sekarang
+        $tahun = $this->filters['tahun'] ?? date('Y');
+
+        // Query data berdasarkan tahun
         $data = DokumenPendukung::select('urutan_indikator', DB::raw('COUNT(*) as total'))
             ->whereYear('created_at', $tahun)
             ->groupBy('urutan_indikator')
             ->with('indikator')
             ->get();
-    
+
         $labels = $data->pluck('indikator.nama_indikator');
         $values = $data->pluck('total');
-    
+
         return [
             'datasets' => [
                 [
@@ -57,6 +40,5 @@ class GrafikJumlahDokumenPerTahun extends BarChartWidget
             'labels' => $labels,
         ];
     }
-
-    protected static string $chartId = 'grafik-dokumen-indikator';
 }
+
