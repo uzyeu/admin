@@ -41,9 +41,17 @@ class IndikatorResource extends Resource
                 Tables\Columns\TextColumn::make('nama_indikator')
                 ->searchable(),
                 Tables\Columns\TextColumn::make('deskripsi'),
-                Tables\Columns\TextColumn::make('admin_dinas_id')
+                // Tables\Columns\TextColumn::make('admin_dinas_id')
+                // ->searchable(),
+                Tables\Columns\TextColumn::make('adminDinas.nama_dinas')
+                ->label('Nama Admin Dinas')
+                ->sortable()
                 ->searchable(),
-
+                // Tables\Columns\ToggleColumn::make('is_updated')
+                // ->label('Update Selesai')
+                // ->onColor('success')
+                // ->offColor('danger'),
+                // ->after('jumlah_dokumen'),
             ])
             ->defaultSort('urutan_indikator')
             ->filters([

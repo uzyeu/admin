@@ -471,14 +471,35 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        InformasiIndikator::create([
-            'indeks' => 3,
+        InformasiIndikator::insert([
+        [
+            'indeks' => 3.5,
             'tahun' => 2024,
             'urutan_indikator' => 1,
             'admin_dinas_id' => 1,
-            'jumlah_dokumen' => 3,
+            // 'jumlah_dokumen' => 0,
+            'is_updated' => true, // Sudah selesai di-update
             'created_at' => now(),
             'updated_at' => now()
+        ],
+        [    
+            'indeks' => 2.8,
+            'tahun' => 2024,
+            'urutan_indikator' => 2,
+            'admin_dinas_id' => 1,
+            // 'jumlah_dokumen' => 0,
+            'is_updated' => false, // Belum selesai di-update
+            'created_at' => now(),
+            'updated_at' => now()],
+        [            
+            'indeks' => 4.0,
+            'tahun' => 2023,
+            'urutan_indikator' => 1,
+            'admin_dinas_id' => 2,
+            // 'jumlah_dokumen' => 0,
+            'is_updated' => true,
+            'created_at' => now(),
+            'updated_at' => now()]
         ]);
 
         // Indikator::insert([

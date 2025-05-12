@@ -15,9 +15,6 @@ return new class extends Migration
             $table->id();
             $table->float('indeks');
 
-            // $table->unsignedBigInteger('tahun');
-            // $table->foreignId('tahun')->constrained()->cascadeOnDelete();
-
             $table->unsignedBigInteger('tahun');
             $table->foreign('tahun')->references('tahun')->on('evaluasi_tahuns')->onDelete('cascade');
         
@@ -29,7 +26,11 @@ return new class extends Migration
             // tambahan chatgpt ini nda paham pka
             $table->unique(['urutan_indikator', 'tahun']); 
 
-            $table->integer('jumlah_dokumen'); 
+            $table->integer('jumlah_dokumen')->default(0); 
+            $table->boolean('is_updated')
+                  ->default(false)
+                //   ->after('jumlah_dokumen')
+                  ->comment('Flag apakah admin sudah menyelesaikan update dokumen');
             $table->timestamps();
         });
     }

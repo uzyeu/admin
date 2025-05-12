@@ -21,4 +21,19 @@ class Indikator extends Model
     public $incrementing = false; // Jika urutan_indikator bukan integer auto-increment
     protected $keyType = 'integer'; // Sesuaikan dengan tipe data urutan_indikator
 
+    // app/Models/InformasiIndikator.php
+    protected $fillable = [
+        // ... field lainnya
+        'is_updated'
+    ];
+
+    protected $casts = [
+        'is_updated' => 'boolean'
+    ];
+        public function adminDinas()
+    {
+        return $this->belongsTo(AdminDinas::class, 'admin_dinas_id', 'id');
+    }
+
+
 }
