@@ -3,11 +3,9 @@
 namespace App\Filament\Resources\DokumenPendukungResource\Pages;
 
 use App\Filament\Resources\DokumenPendukungResource;
-use Filament\Resources\Pages\Page;
+use Filament\Resources\Pages\CreateRecord;
 
-class CreateDokumenPendukung extends Page
+class CreateDokumenPendukung extends CreateRecord
 {
     protected static string $resource = DokumenPendukungResource::class;
-
-    protected static string $view = 'filament.resources.dokumen-pendukung-resource.pages.create-dokumen-pendukung';
 }

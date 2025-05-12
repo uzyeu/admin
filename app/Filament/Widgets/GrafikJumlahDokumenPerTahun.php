@@ -1,19 +1,18 @@
 <?php
+
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\BarChartWidget;
 use App\Models\DokumenPendukung;
-use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class GrafikJumlahDokumenPerTahun extends BarChartWidget
 {
     protected static ?string $heading = 'Jumlah Dokumen per Indikator';
     protected static ?int $sort = 2;
-
     protected static string $chartId = 'grafik-dokumen-indikator';
 
-    // Ambil filter dari dashboard (misalnya 'tahun')
     protected function getData(): array
     {
         // Ambil filter tahun dari dashboard, jika tidak ada pakai tahun sekarang
@@ -26,8 +25,18 @@ class GrafikJumlahDokumenPerTahun extends BarChartWidget
             ->with('indikator')
             ->get();
 
-        $labels = $data->pluck('indikator.nama_indikator');
-        $values = $data->pluck('total');
+        // Buat label dengan urutan indikator dan nama terpotong
+        $labels = [];
+        $fullLabels = [];
+        foreach ($data as $item) {
+            $urutan = $item->urutan_indikator;
+            $nama = $item->indikator->nama_indikator;
+            $shortLabel = "{$urutan}. " . Str::limit($nama, 7, '...');
+            $labels[] = $shortLabel;
+            $fullLabels[] = "{$urutan}. {$nama}";
+        }
+
+        $values = $data->pluck('total')->map(fn($value) => (int) $value)->toArray();
 
         return [
             'datasets' => [
@@ -38,7 +47,32 @@ class GrafikJumlahDokumenPerTahun extends BarChartWidget
                 ],
             ],
             'labels' => $labels,
+            'options' => [
+                'responsive' => true,
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'x' => [
+                        'ticks' => ['autoSkip' => false],
+                        'grid' => ['display' => false],
+                    ],
+                    'y' => [
+                        'beginAtZero' => true,
+                        'grid' => ['display' => true],
+                    ],
+                ],
+                'plugins' => [
+                    'legend' => ['display' => true],
+                    'tooltip' => [
+                        'callbacks' => [
+                            'title' => "function(tooltipItems) {
+                                const index = tooltipItems[0].dataIndex;
+                                const fullLabels = " . json_encode($fullLabels) . ";
+                                return fullLabels[index] || tooltipItems[0].label;
+                            }",
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }
-

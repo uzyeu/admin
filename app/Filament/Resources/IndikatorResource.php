@@ -7,6 +7,7 @@ use App\Filament\Resources\IndikatorResource\RelationManagers;
 use App\Models\Indikator;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\EditAction;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,6 +19,8 @@ class IndikatorResource extends Resource
     protected static ?string $model = Indikator::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-folder-open';
+
+    protected static ?string $navigationLabel = 'Daftar Indikator SPBE';
 
     public static function form(Form $form): Form
     {
@@ -32,11 +35,22 @@ class IndikatorResource extends Resource
         return $table
             ->columns([
                 //
+                Tables\Columns\TextColumn::make('urutan_indikator')
+                ->searchable(),
+
+                Tables\Columns\TextColumn::make('nama_indikator')
+                ->searchable(),
+                Tables\Columns\TextColumn::make('deskripsi'),
+                Tables\Columns\TextColumn::make('admin_dinas_id')
+                ->searchable(),
+
             ])
+            ->defaultSort('urutan_indikator')
             ->filters([
                 //
             ])
             ->actions([
+                // EditAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

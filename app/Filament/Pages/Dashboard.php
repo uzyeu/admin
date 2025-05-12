@@ -35,12 +35,12 @@ class Dashboard extends BaseDashboard
                     ->columns(3),
             ]);
     }
-        protected function getHeaderWidgets(): array
-    {
-        return [
-            GrafikJumlahDokumenPerTahun::class,
-        ];
-    }
+    //     protected function getHeaderWidgets(): array
+    // {
+    //     return [
+    //         GrafikJumlahDokumenPerTahun::class,
+    //     ];
+    // }
     protected function getAvailableYears(): array
 {
     return DokumenPendukung::selectRaw('YEAR(created_at) as tahun')

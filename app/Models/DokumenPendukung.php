@@ -13,7 +13,11 @@ class DokumenPendukung extends Model
     }
 
     protected $fillable = [
-        'dokumen_pendukung', // Tambahkan ini
+        'file_path',
+        'admin_dinas_id',
+        'urutan_indikator',
+        'tahun' 
+        // Tambahkan ini
         // tambahkan field lain yang kamu izinkan untuk diisi
     ];
         // App\Models\DokumenPendukung.php

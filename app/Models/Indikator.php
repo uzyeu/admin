@@ -17,5 +17,8 @@ class Indikator extends Model
     {
         return $this->dokumenPendukungs()->count();
     }
+    protected $primaryKey = 'urutan_indikator';
+    public $incrementing = false; // Jika urutan_indikator bukan integer auto-increment
+    protected $keyType = 'integer'; // Sesuaikan dengan tipe data urutan_indikator
 
 }

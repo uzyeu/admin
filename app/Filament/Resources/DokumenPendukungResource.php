@@ -13,26 +13,26 @@ use Filament\Tables\Table;
 class DokumenPendukungResource extends Resource
 {
     protected static ?string $model = DokumenPendukung::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-document';
+
+    protected static ?string $navigationLabel = 'Daftar Dokumen Pendukung';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                // Menambahkan komponen untuk upload file
-                Forms\Components\FileUpload::make('dokumen_pendukung')
-                    ->required() // Pastikan field ini wajib diisi
-                    ->panelLayout('grid') // Mengatur layout panel
-                    ->disk('public') // Menyimpan file ke disk public
-                    ->directory('dokumen_pendukung') // Menyimpan file ke folder 'dokumen_pendukung'
-                    ->acceptedFileTypes(['application/pdf', 'image/*']) // Menyaring tipe file yang diterima
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        // Setelah file diupload, set nama file ke field 'dokumen_pendukung'
-                        if ($state) {
-                            $set('dokumen_pendukung', $state->getFilename());
-                        }
-                    }),
+                Forms\Components\FileUpload::make('file_path')
+                    ->required(),
+                    // ->placeholder('Pilih dokumen pendukung'),
+
+                Forms\Components\TextInput::make('admin_dinas_id')
+                    ->required(),
+
+                Forms\Components\TextInput::make('urutan_indikator')
+                    ->required(),
+
+                Forms\Components\TextInput::make('tahun')
+                    ->required(),
             ]);
     }
 
@@ -40,26 +40,18 @@ class DokumenPendukungResource extends Resource
     {
         return $table
             ->columns([
-                // Anda dapat menambahkan kolom-kolom lain sesuai kebutuhan
+                Tables\Columns\TextColumn::make('file_path'),
+                Tables\Columns\TextColumn::make('admin_dinas_id'),
+                Tables\Columns\TextColumn::make('urutan_indikator'),
+                Tables\Columns\TextColumn::make('tahun'),
             ])
-            ->filters([
-                // Filter yang dapat diterapkan pada tabel
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            // Anda bisa menambahkan hubungan model jika diperlukan
-        ];
     }
 
     public static function getPages(): array

@@ -19,6 +19,8 @@ class InformasiIndikatorResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Detail Informasi Indikator';
+
     public static function form(Form $form): Form
     {
         return $form

@@ -19,43 +19,46 @@ class AdminDinasResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Daftar Admin Dinas';
+
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 //
                 Forms\Components\TextInput::make('email')
-            ->placeholder('Masukkan email')
-            ->required()
-            ->suffix('@gmail.com')
-            ->maxLength(255)
-            ->dehydrateStateUsing(function ($state) {
-                return str_ends_with($state, '@gmail.com') ? $state : $state . '@gmail.com';
-            }),
+                    ->placeholder('Masukkan email')
+                    ->required()
+                    ->suffix('@gmail.com')
+                    ->maxLength(255)
+                    ->dehydrateStateUsing(function ($state) {
+                        return str_ends_with($state, '@gmail.com') ? $state : $state . '@gmail.com';
+                    }),
 
-        Forms\Components\TextInput::make('nama_dinas')
-            ->placeholder('Pilih dinas terkait')
-            ->required()
-            ->datalist([
-                'DISKOMINFO',
-                'SETDAKO',
-                'INSPEKTORAT',
-                'BKPSDM',
-                'BAPPEDA',
-                'BKD',
-                'DINAS PERPUSTAKAAN',
-                'DPMPTSP',
-                'DISDUKCAPIL',
-                'DINAS KESEHATAN',
-                'DINAS SOSIAL',
-            ]),
+                Forms\Components\TextInput::make('nama_dinas')
+                    ->placeholder('Pilih dinas terkait')
+                    ->required()
+                    ->datalist([
+                        'DISKOMINFO',
+                        'SETDAKO',
+                        'INSPEKTORAT',
+                        'BKPSDM',
+                        'BAPPEDA',
+                        'BKD',
+                        'DINAS PERPUSTAKAAN',
+                        'DPMPTSP',
+                        'DISDUKCAPIL',
+                        'DINAS KESEHATAN',
+                        'DINAS SOSIAL',
+                    ]),
 
-        Forms\Components\TextInput::make('kata_sandi')
-            ->placeholder('Masukkan kata sandi')
-            ->required()
-            ->password()
-            ->revealable()
-            ->maxLength(255),
+                Forms\Components\TextInput::make('kata_sandi')
+                    ->placeholder('Masukkan kata sandi')
+                    ->required()
+                    ->password()
+                    ->revealable()
+                    ->maxLength(255),
 
             ]);
     }

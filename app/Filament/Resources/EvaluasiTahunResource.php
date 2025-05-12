@@ -19,6 +19,8 @@ class EvaluasiTahunResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'History Evaluasi SPBE ';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -32,6 +34,8 @@ class EvaluasiTahunResource extends Resource
         return $table
             ->columns([
                 //
+                Tables\Columns\TextColumn::make('tahun'),
+                Tables\Columns\TextColumn::make('indeks_akumulasi'),
             ])
             ->filters([
                 //
