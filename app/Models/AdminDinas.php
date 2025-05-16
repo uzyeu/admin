@@ -13,4 +13,8 @@ class AdminDinas extends Model
         'kata_sandi', // Tambahkan ini
         // tambahkan field lain yang kamu izinkan untuk diisi
     ];
+        public function indikators()
+    {
+        return $this->hasMany(Indikator::class, 'admin_dinas_id');
+    }
 }

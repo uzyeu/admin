@@ -44,7 +44,7 @@ class IndikatorResource extends Resource
                 // Tables\Columns\TextColumn::make('admin_dinas_id')
                 // ->searchable(),
                 Tables\Columns\TextColumn::make('adminDinas.nama_dinas')
-                ->label('Nama Admin Dinas')
+                ->label('Nama Dinas')
                 ->sortable()
                 ->searchable(),
                 // Tables\Columns\ToggleColumn::make('is_updated')

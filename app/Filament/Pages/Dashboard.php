@@ -19,20 +19,20 @@ class Dashboard extends BaseDashboard
     {
         return $form
             ->schema([
-                Section::make()
-                    ->schema([
-                        Select::make('tahun')
-                            ->label('Pilih Tahun')
-                            ->options($this->getAvailableYears())
-                            ->default(date('Y')),
-                        // Select::make('businessCustomersOnly')->boolean(),
-                        // DatePicker::make('startDate')
-                        //     ->maxDate(fn (Get $get) => $get('endDate') ?: now()),
-                        // DatePicker::make('endDate')
-                        //     ->minDate(fn (Get $get) => $get('startDate') ?: now())
-                        //     ->maxDate(now()),
-                    ])
-                    ->columns(3),
+                // Section::make()
+                //     ->schema([
+                //         Select::make('tahun')
+                //             ->label('Pilih Tahun')
+                //             ->options($this->getAvailableYears())
+                //             ->default(date('Y')),
+                //         // Select::make('businessCustomersOnly')->boolean(),
+                //         // DatePicker::make('startDate')
+                //         //     ->maxDate(fn (Get $get) => $get('endDate') ?: now()),
+                //         // DatePicker::make('endDate')
+                //         //     ->minDate(fn (Get $get) => $get('startDate') ?: now())
+                //         //     ->maxDate(now()),
+                //     ])
+                //     ->columns(3),
             ]);
     }
     //     protected function getHeaderWidgets(): array

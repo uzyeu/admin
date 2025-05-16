@@ -35,5 +35,7 @@ class Indikator extends Model
         return $this->belongsTo(AdminDinas::class, 'admin_dinas_id', 'id');
     }
 
+    
+
 
 }
