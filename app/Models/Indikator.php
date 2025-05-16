@@ -3,39 +3,49 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Indikator extends Model
 {
-    //
-    public function dokumenPendukungs()
-{
-    return $this->hasMany(DokumenPendukung::class, 'indikator_id', 'urutan_indikator');
-}
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    
+    protected $fillable = [
+        'urutan_indikator',
+        'nama_indikator',
+        'deskripsi',
+        'aspek_id'
+    ];
+
+    // Relationship with dokumen pendukung
+    public function dokumenPendukungs(): HasMany
+    {
+        return $this->hasMany(DokumenPendukung::class, 'indikator_id');
+    }
+
+    // Relationship with aspek
+    public function aspek(): BelongsTo
+    {
+        return $this->belongsTo(Aspek::class);
+    }
+
+    // Relationship with dinas (users) through pivot
+    public function dinas(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'dinas_indikators', 'indikator_id', 'user_id');
+    }
+
+    // Relationship with informasi indikators
+    public function informasiIndikators(): HasMany
+    {
+        return $this->hasMany(InformasiIndikator::class, 'indikator_id');
+    }
 
     // Derivatif manual (jumlah dokumen total)
     public function getJumlahDokumenAttribute()
     {
         return $this->dokumenPendukungs()->count();
     }
-    protected $primaryKey = 'urutan_indikator';
-    public $incrementing = false; // Jika urutan_indikator bukan integer auto-increment
-    protected $keyType = 'integer'; // Sesuaikan dengan tipe data urutan_indikator
-
-    // app/Models/InformasiIndikator.php
-    protected $fillable = [
-        // ... field lainnya
-        'is_updated'
-    ];
-
-    protected $casts = [
-        'is_updated' => 'boolean'
-    ];
-        public function adminDinas()
-    {
-        return $this->belongsTo(AdminDinas::class, 'admin_dinas_id', 'id');
-    }
-
-    
-
-
 }

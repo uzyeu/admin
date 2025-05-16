@@ -3,24 +3,43 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class InformasiIndikator extends Model
 {
-    //
-    protected $fillable = ['tahun', 'urutan_indikator','jumlah_dokumen', 'is_updated'];
+    protected $fillable = [
+        'indeks',
+        'tahun',
+        'indikator_id',
+        'user_id',
+        'jumlah_dokumen',
+        'is_updated'
+    ];
 
-    public function dokumenPendukung()
+    protected $casts = [
+        'is_updated' => 'boolean'
+    ];
+
+    public function indikator(): BelongsTo
     {
-        return $this->hasMany(DokumenPendukung::class, 'urutan_indikator', 'urutan_indikator');
-    }
-    
-    public function adminDinas()
-    {
-        return $this->belongsTo(AdminDinas::class, 'admin_dinas_id', 'id');
+        return $this->belongsTo(Indikator::class, 'indikator_id');
     }
 
-    public function indikator()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Indikator::class, 'urutan_indikator', 'urutan_indikator');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function tahun(): BelongsTo
+    {
+        return $this->belongsTo(EvaluasiTahun::class, 'tahun', 'tahun');
+    }
+
+    public function dokumenPendukungs(): HasMany
+    {
+        return $this->hasMany(DokumenPendukung::class, 'indikator_id', 'indikator_id')
+            ->where('tahun', $this->tahun);
     }
 }

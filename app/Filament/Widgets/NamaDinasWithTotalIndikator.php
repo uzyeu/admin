@@ -2,38 +2,51 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\AdminDinas;
+use App\Models\User;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Filters\SelectFilter;
 
 class NamaDinasWithTotalIndikator extends BaseWidget
 {
     protected int | string | array $columnSpan = 'full';
     protected static ?string $heading = 'Daftar Dinas dan Total Indikator';
-    protected static ?int $sort = 999; 
+    protected static ?int $sort = 4;
 
-    function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->query(
-                AdminDinas::query()
+                User::query()
+                    ->where('role', 'admin_dinas')
                     ->withCount('indikators')
                     ->orderBy('indikators_count', 'desc')
             )
-            ->defaultPaginationPageOption(10)
             ->columns([
                 Tables\Columns\TextColumn::make('nama_dinas')
                     ->label('Nama Dinas')
                     ->searchable()
                     ->sortable(),
+                    
                 Tables\Columns\TextColumn::make('indikators_count')
                     ->label('Total Indikator')
                     ->sortable(),
+                    
+                Tables\Columns\TextColumn::make('dokumenPendukungs_count')
+                    ->label('Dokumen Terupload')
+                    ->sortable(),
             ])
-            ->filters([])
-            ->actions([])
-            ->bulkActions([]);
+            ->filters([
+                SelectFilter::make('tahun')
+                    ->options(
+                        fn() => \App\Models\DokumenPendukung::query()
+                            ->select('tahun')
+                            ->distinct()
+                            ->pluck('tahun', 'tahun')
+                            ->toArray()
+                    )
+                    ->label('Filter Tahun Dokumen'),
+            ]);
     }
 }

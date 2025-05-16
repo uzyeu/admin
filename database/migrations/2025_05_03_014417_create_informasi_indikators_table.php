@@ -15,22 +15,20 @@ return new class extends Migration
             $table->id();
             $table->float('indeks');
 
-            $table->unsignedBigInteger('tahun');
-            $table->foreign('tahun')->references('tahun')->on('evaluasi_tahuns')->onDelete('cascade');
-        
-            $table->unsignedBigInteger('urutan_indikator');
+            // $table->unsignedBigInteger('tahun');
+            // $table->foreign('tahun')->references('tahun')->on('evaluasi_tahuns')->onDelete('cascade');
+            $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun')->onDelete('cascade');
+            $table->foreignId('indikator_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            // $table->unsignedBigInteger('urutan_indikator');
             // $table->foreignId('urutan_indikator')->constrained()->cascadeOnDelete();
-            $table->foreign('urutan_indikator')->references('urutan_indikator')->on('indikators')->onDelete('cascade');
-            $table->foreignId('admin_dinas_id')->constrained('admin_dinas')->cascadeOnDelete();
-
             // tambahan chatgpt ini nda paham pka
-            $table->unique(['urutan_indikator', 'tahun']); 
+            $table->unique(['indikator_id', 'tahun']); 
 
             $table->integer('jumlah_dokumen')->default(0); 
-            $table->boolean('is_updated')
-                  ->default(false)
+            $table->boolean('is_updated') ->default(false);
                 //   ->after('jumlah_dokumen')
-                  ->comment('Flag apakah admin sudah menyelesaikan update dokumen');
+                //   ->comment('Flag apakah admin sudah menyelesaikan update dokumen');
             $table->timestamps();
         });
     }

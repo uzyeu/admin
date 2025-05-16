@@ -12,10 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('indikators', function (Blueprint $table) {
-            $table->unsignedBigInteger('urutan_indikator')->primary();
+            // $table->unsignedBigInteger('urutan_indikator')->primary();
+            $table->id(); // Gunakan id auto-increment sebagai primary key
+            $table->unsignedInteger('urutan_indikator'); 
             $table->string('nama_indikator');
             $table->text('deskripsi');
-            $table->foreignId('admin_dinas_id')->constrained('admin_dinas')->cascadeOnDelete();
+            $table->foreignId('aspek_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('admin_dinas_id')->constrained('admin_dinas')->cascadeOnDelete();
             // $table->string('data_pendukung');
             $table->timestamps();
             // $table->boolean('status_update');

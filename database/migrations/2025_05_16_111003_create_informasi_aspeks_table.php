@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin_dinas', function (Blueprint $table) {
+        Schema::create('informasi_aspeks', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
-            $table->string('nama_dinas');
-            $table->string('kata_sandi');
+            $table->float('indeks')->nullable(); // Diisi manual oleh admin pusat
+            $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun');
+            $table->foreignId('aspek_id')->constrained();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admin_dinas');
+        Schema::dropIfExists('informasi_aspeks');
     }
 };

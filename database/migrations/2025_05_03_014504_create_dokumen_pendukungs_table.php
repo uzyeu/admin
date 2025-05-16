@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('dokumen_pendukungs', function (Blueprint $table) {
             $table->id(); // Tambahkan ID sebagai primary key
-            $table->string('file_path'); // Kolom untuk nama/path file
-
-            $table->foreignId('admin_dinas_id')->constrained()->cascadeOnDelete(); // Relasi ke admin_dinas
-            $table->unsignedBigInteger('urutan_indikator');
-            $table->foreign('urutan_indikator')->references('urutan_indikator')->on('indikators')->onDelete('cascade');
-     
-            $table->unsignedBigInteger('tahun');
-            $table->foreign('tahun')->references('tahun')->on('evaluasi_tahuns')->cascadeOnDelete();
-
-            $table->timestamps(); // created_at dan updated_at
+            $table->string('nama_file');
+            $table->string('file_path');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('jenis_dokumen')->nullable();
+            $table->unsignedBigInteger('ukuran')->comment('Dalam bytes');
+            // $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('indikator_id')->constrained()->onDelete('cascade');
+            $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun')->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 

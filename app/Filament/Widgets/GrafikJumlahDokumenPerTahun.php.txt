@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Filament\Widgets;
+
+use Filament\Widgets\BarChartWidget;
+use App\Models\DokumenPendukung;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Facades\DB;
+use App\Models\Indikator;
+use Flowframe\Trend\Trend;
+use Flowframe\Trend\TrendValue;
+
+class GrafikJumlahDokumenPerTahun extends BarChartWidget
+{
+    protected static ?string $heading = 'Jumlah Dokumen per Indikator';
+    protected static ?int $sort = 3;
+    protected static ?string $maxHeight = '400px';
+    protected static string $chartId = 'grafik-dokumen-indikator';
+
+    protected function getData(): array
+    {
+        // Ambil tahun aktif dari filter atau gunakan tahun sekarang
+        $tahun = $this->filters['tahun'] ?? now()->year;
+
+        // Query data dokumen per indikator untuk tahun tertentu
+        $data = DokumenPendukung::query()
+            ->select('indikator_id', DB::raw('COUNT(*) as total'))
+            ->where('tahun', $tahun)
+            ->groupBy('indikator_id')
+            ->with('indikator') // Eager load relasi indikator
+            ->get();
+
+        // Siapkan data untuk chart
+        $datasets = [];
+        $labels = [];
+        $colors = [];
+
+        foreach ($data as $item) {
+            $indikator = $item->indikator;
+            $labels[] = "Indikator {$indikator->urutan_indikator}";
+            
+            $datasets[] = $item->total;
+            $colors[] = $this->generateColor($indikator->urutan_indikator);
+        }
+
+        return [
+            'datasets' => [
+                [
+                    'label' => "Jumlah Dokumen ($tahun)",
+                    'data' => $datasets,
+                    'backgroundColor' => $colors,
+                    'borderColor' => array_map(fn($c) => str_replace('0.6', '1', $c), $colors),
+                    'borderWidth' => 1,
+                ],
+            ],
+            'labels' => $labels,
+        ];
+    }
+
+    protected function getFilters(): ?array
+    {
+        return [
+            SelectFilter::make('tahun')
+                ->options(
+                    DokumenPendukung::query()
+                        ->select('tahun')
+                        ->distinct()
+                        ->orderBy('tahun', 'desc')
+                        ->pluck('tahun', 'tahun')
+                )
+                ->default(now()->year)
+                ->label('Tahun Evaluasi'),
+        ];
+    }
+
+    private function generateColor(int $index): string
+    {
+        $colors = [
+            'rgba(54, 162, 235, 0.6)',  // Blue
+            'rgba(255, 99, 132, 0.6)',   // Red
+            'rgba(75, 192, 192, 0.6)',   // Teal
+            'rgba(255, 159, 64, 0.6)',   // Orange
+            'rgba(153, 102, 255, 0.6)', // Purple
+            'rgba(255, 205, 86, 0.6)',  // Yellow
+            'rgba(201, 203, 207, 0.6)',  // Gray
+            'rgba(0, 128, 0, 0.6)',      // Green
+        ];
+
+        return $colors[$index % count($colors)];
+    }
+}
