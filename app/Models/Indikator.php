@@ -36,6 +36,12 @@ class Indikator extends Model
     {
         return $this->belongsToMany(User::class, 'dinas_indikators', 'indikator_id', 'user_id');
     }
+    public function dinasPenanggungJawab()
+{
+    return $this->belongsToMany(User::class, 'informasi_indikators', 'indikator_id', 'user_id')
+                ->withPivot('tahun', 'indeks')
+                ->withTimestamps();
+}
 
     // Relationship with informasi indikators
     public function informasiIndikators(): HasMany

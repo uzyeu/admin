@@ -8,12 +8,19 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Dashboard as BaseDashboard;
-use App\Filament\Widgets\GrafikJumlahDokumenPerTahun;
+use App\Filament\Widgets\GrafikIndeksAspek;
 use App\Models\DokumenPendukung;
 
 class Dashboard extends BaseDashboard
 {
     use BaseDashboard\Concerns\HasFiltersForm;
+
+    //     protected function getHeaderWidgets(): array
+    // {
+    //     return [
+    //         GrafikIndeksAspek::class,
+    //     ];
+    // }
 
     public function filtersForm(Form $form): Form
     {
@@ -41,12 +48,12 @@ class Dashboard extends BaseDashboard
     //         GrafikJumlahDokumenPerTahun::class,
     //     ];
     // }
-    protected function getAvailableYears(): array
-{
-    return DokumenPendukung::selectRaw('YEAR(created_at) as tahun')
-        ->distinct()
-        ->orderBy('tahun', 'desc')
-        ->pluck('tahun', 'tahun')
-        ->toArray();
-}
+//     protected function getAvailableYears(): array
+// {
+//     return DokumenPendukung::selectRaw('YEAR(created_at) as tahun')
+//         ->distinct()
+//         ->orderBy('tahun', 'desc')
+//         ->pluck('tahun', 'tahun')
+//         ->toArray();
+// }
 }

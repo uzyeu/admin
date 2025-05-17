@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('informasi_aspeks', function (Blueprint $table) {
             $table->id();
             $table->float('indeks')->nullable(); // Diisi manual oleh admin pusat
-            $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun');
+            // $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun');
+            $table->year('tahun');
+                        $table->foreign('tahun')
+                            ->references('tahun')
+                            ->on('evaluasi_tahuns')
+                            ->cascadeOnDelete();
             $table->foreignId('aspek_id')->constrained();
             $table->timestamps();
         });

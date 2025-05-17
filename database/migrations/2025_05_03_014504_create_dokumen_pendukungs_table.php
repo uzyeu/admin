@@ -20,7 +20,12 @@ return new class extends Migration
             $table->unsignedBigInteger('ukuran')->comment('Dalam bytes');
             // $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('indikator_id')->constrained()->onDelete('cascade');
-            $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun')->cascadeOnDelete();
+            // $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun')->cascadeOnDelete();
+            $table->year('tahun');
+            $table->foreign('tahun')
+                ->references('tahun')
+                ->on('evaluasi_tahuns')
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
