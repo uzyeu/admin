@@ -18,10 +18,7 @@ return new class extends Migration
             $table->string('nama_indikator');
             $table->text('deskripsi')->nullable();
             $table->foreignId('aspek_id')->constrained()->onDelete('cascade');
-            // $table->foreignId('admin_dinas_id')->constrained('admin_dinas')->cascadeOnDelete();
-            // $table->string('data_pendukung');
             $table->timestamps();
-            // $table->boolean('status_update');
         });
     }
 
