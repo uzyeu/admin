@@ -9,4 +9,12 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDinasIndikator extends CreateRecord
 {
     protected static string $resource = DinasIndikatorResource::class;
+    public function getTitle(): string
+    {
+        return 'Tambahkan Dinas';
+    }
+    public function getBreadcrumb(): string
+    {
+        return 'Tambah'; // Gantilah dengan teks yang kamu inginkan
+    }
 }

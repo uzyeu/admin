@@ -54,4 +54,5 @@ class Indikator extends Model
     {
         return $this->dokumenPendukungs()->count();
     }
+
 }

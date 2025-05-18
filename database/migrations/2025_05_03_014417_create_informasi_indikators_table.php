@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('informasi_indikators', function (Blueprint $table) {
             $table->id();
-            $table->float('indeks');
-            // $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun')->onDelete('cascade');
-            
+            $table->float('indeks')->nullable();
             $table->year('tahun');
             $table->foreign('tahun')
                 ->references('tahun')

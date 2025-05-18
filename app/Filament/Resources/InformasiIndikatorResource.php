@@ -8,11 +8,9 @@ use App\Models\InformasiIndikator;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Model; 
+use Filament\Notifications\Notification;
 use Filament\Tables;
-use App\Models\AdminDinas;
-use App\Models\DokumenPendukung;
-use App\Models\Indikator;
-use App\Models\EvaluasiTahun;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -21,15 +19,34 @@ class InformasiIndikatorResource extends Resource
 {
     protected static ?string $model = InformasiIndikator::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-information-circle';
+    protected static ?string $navigationGroup = 'Indikator';
+    // protected static ?int $navigationSort = 4; 
 
-    protected static ?string $navigationLabel = 'Detail Informasi Indikator';
+    protected static ?string $pluralLabel = 'Detail Informasi Indikator SPBE';
+
+    protected static ?string $navigationLabel = 'Detail Informasi Indikator SPBE';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('indeks')
+                    ->numeric(),
+                Forms\Components\TextInput::make('tahun')
+                    ->required(),
+                Forms\Components\Select::make('indikator_id')
+                    ->relationship('indikator', 'id')
+                    ->required(),
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->required(),
+                Forms\Components\TextInput::make('jumlah_dokumen')
+                    ->required()
+                    ->numeric()
+                    ->default(0),
+                Forms\Components\Toggle::make('is_updated')
+                    ->required(),
             ]);
     }
 
@@ -37,86 +54,57 @@ class InformasiIndikatorResource extends Resource
     {
         return $table
             ->columns([
-                //
-                Tables\Columns\TextColumn::make('adminDinas.nama_dinas')
-                    ->label('Admin Dinas')
-                    ->searchable()
-                    ->sortable(),
-                
-                Tables\Columns\TextColumn::make('indikator.nama_indikator')
-                    ->label('Indikator')
-                    ->searchable()
-                    ->sortable()
-                    ->wrap(),
-                
-                Tables\Columns\TextColumn::make('tahun')
-                    ->sortable(),
-                
                 Tables\Columns\TextColumn::make('indeks')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('tahun'),
+                Tables\Columns\TextColumn::make('indikator.id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('jumlah_dokumen')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\ToggleColumn::make('is_updated')
+                    ->updateStateUsing(function (Model $record, $state) {
+                        try {
+                            $record->update(['is_updated' => $state]);
+                            
+                            Notification::make()
+                                ->title('Status update berhasil diubah')
+                                ->success()
+                                ->send();
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title('Gagal mengubah status')
+                                ->danger()
+                                ->send();
+                            
+                            throw $e;
+                        }
+                    }),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
                     ->sortable()
-                    ->color(fn (float $state) => match (true) {
-                        $state >= 4 => 'success',
-                        $state >= 3 => 'info',
-                        $state >= 2 => 'warning',
-                        default => 'danger',
-                    }),
-                
-               Tables\Columns\TextColumn::make('jumlah_dokumen')
-                        ->label('Jml Dokumen')
-                        ->sortable()
-                        ->getStateUsing(function ($record) {
-                            // Hitung jumlah dokumen berdasarkan indikator dan tahun
-                            return DokumenPendukung::where('urutan_indikator', $record->urutan_indikator)
-                                ->whereYear('created_at', $record->tahun)
-                                ->count();
-                    }),
-                
-                Tables\Columns\IconColumn::make('is_updated')
-                    ->label('Status')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->trueColor('success')
-                    ->falseColor('danger'),
-
-
-
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
-                Tables\Filters\SelectFilter::make('tahun')
-                    ->options(EvaluasiTahun::all()->pluck('tahun', 'tahun')),
-                
-                Tables\Filters\SelectFilter::make('admin_dinas_id')
-                    ->label('Admin Dinas')
-                    ->options(AdminDinas::all()->pluck('nama_dinas', 'id')),
-                
-                Tables\Filters\SelectFilter::make('urutan_indikator')
-                    ->label('Indikator')
-                    ->options(Indikator::all()->pluck('nama_indikator', 'urutan_indikator')),
-                
-                Tables\Filters\TernaryFilter::make('is_updated')
-                    ->label('Status Update')
-                    ->placeholder('Semua')
-                    ->trueLabel('Sudah Update')
-                    ->falseLabel('Belum Update'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('toggleUpdate')
-                    ->label(fn ($record) => $record->is_updated ? 'Tandai Belum Selesai' : 'Tandai Selesai')
-                    ->icon(fn ($record) => $record->is_updated ? 'heroicon-o-x-mark' : 'heroicon-o-check')
-                    ->color(fn ($record) => $record->is_updated ? 'danger' : 'success')
-                    ->action(function ($record) {
-                        $record->update(['is_updated' => !$record->is_updated]);
-                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->defaultSort('tahun', 'desc');
+            ]);
     }
 
     public static function getRelations(): array

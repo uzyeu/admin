@@ -7,7 +7,6 @@ use App\Filament\Resources\IndikatorResource\RelationManagers;
 use App\Models\Indikator;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Tables\Actions\EditAction;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,15 +17,34 @@ class IndikatorResource extends Resource
 {
     protected static ?string $model = Indikator::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-folder-open';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Indikator';
+    // protected static ?int $navigationSort = 4; 
+
+    // protected ?string $subheading = 'Custom Page Subheading';
+
+        // protected static ?string $navigationIcon = 'heroicon-o-folder-open';
+    
 
     protected static ?string $navigationLabel = 'Daftar Indikator SPBE';
+    protected static ?string $pluralLabel = 'Daftar Indikator SPBE';
+
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('urutan_indikator')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('nama_indikator')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('deskripsi')
+                    ->columnSpanFull(),
+                Forms\Components\Select::make('aspek_id')
+                    ->relationship('aspek', 'id')
+                    ->required(),
             ]);
     }
 
@@ -34,31 +52,27 @@ class IndikatorResource extends Resource
     {
         return $table
             ->columns([
-                //
                 Tables\Columns\TextColumn::make('urutan_indikator')
-                ->searchable(),
-
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('nama_indikator')
-                ->searchable(),
-                Tables\Columns\TextColumn::make('deskripsi'),
-                // Tables\Columns\TextColumn::make('admin_dinas_id')
-                // ->searchable(),
-                Tables\Columns\TextColumn::make('adminDinas.nama_dinas')
-                ->label('Nama Dinas')
-                ->sortable()
-                ->searchable(),
-                // Tables\Columns\ToggleColumn::make('is_updated')
-                // ->label('Update Selesai')
-                // ->onColor('success')
-                // ->offColor('danger'),
-                // ->after('jumlah_dokumen'),
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('aspek.id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('urutan_indikator')
             ->filters([
                 //
             ])
             ->actions([
-                // EditAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

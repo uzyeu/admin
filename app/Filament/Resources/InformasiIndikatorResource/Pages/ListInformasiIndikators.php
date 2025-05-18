@@ -16,4 +16,8 @@ class ListInformasiIndikators extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+    public function getBreadcrumb(): string
+    {
+        return 'Daftar'; // Gantilah dengan teks yang kamu inginkan
+    }
 }

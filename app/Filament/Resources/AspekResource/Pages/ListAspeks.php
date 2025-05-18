@@ -16,4 +16,12 @@ class ListAspeks extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+    public function getBreadcrumb(): string
+    {
+        return 'Daftar'; // Gantilah dengan teks yang kamu inginkan
+    }
+    // public function getTitle(): string
+    // {
+    //     return 'Daftar Aspek SPBE';
+    // }
 }

@@ -9,4 +9,12 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateInformasiAspek extends CreateRecord
 {
     protected static string $resource = InformasiAspekResource::class;
+    public function getTitle(): string
+    {
+        return 'Tambahkan Informasi Aspek';
+    }
+    public function getBreadcrumb(): string
+    {
+        return 'Tambah'; // Gantilah dengan teks yang kamu inginkan
+    }
 }

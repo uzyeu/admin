@@ -9,6 +9,10 @@ use Filament\Resources\Pages\ListRecords;
 class ListDinasIndikators extends ListRecords
 {
     protected static string $resource = DinasIndikatorResource::class;
+    public function getBreadcrumb(): string
+    {
+        return 'Daftar'; // Gantilah dengan teks yang kamu inginkan
+    }
 
     protected function getHeaderActions(): array
     {

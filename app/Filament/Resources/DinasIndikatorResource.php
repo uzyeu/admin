@@ -18,12 +18,19 @@ class DinasIndikatorResource extends Resource
     protected static ?string $model = DinasIndikator::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Indikator';
+
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('user_id')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('indikator_id')
+                    ->required()
+                    ->numeric(),
             ]);
     }
 
@@ -31,7 +38,20 @@ class DinasIndikatorResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('user_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('indikator_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

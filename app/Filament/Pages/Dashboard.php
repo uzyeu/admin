@@ -18,7 +18,8 @@ class Dashboard extends BaseDashboard
     //     protected function getHeaderWidgets(): array
     // {
     //     return [
-    //         GrafikIndeksAspek::class,
+    //         \App\Filament\Widgets\CustomChartWidget::class,
+
     //     ];
     // }
 

@@ -17,15 +17,20 @@ class EvaluasiTahunResource extends Resource
 {
     protected static ?string $model = EvaluasiTahun::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
+    protected static ?string $navigationGroup = 'Lainnya';
+    protected static ?string $pluralLabel = 'Riwayat Evaluasi SPBE';
 
-    protected static ?string $navigationLabel = 'History Evaluasi SPBE ';
+    protected static ?string $navigationLabel = 'Riwayat Evaluasi SPBE';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('tahun')
+                    ->required(),
+                Forms\Components\TextInput::make('indeks_akumulasi')
+                    ->numeric(),
             ]);
     }
 
@@ -33,9 +38,19 @@ class EvaluasiTahunResource extends Resource
     {
         return $table
             ->columns([
-                //
-                Tables\Columns\TextColumn::make('tahun'),
-                Tables\Columns\TextColumn::make('indeks_akumulasi'),
+                Tables\Columns\TextColumn::make('tahun')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('indeks_akumulasi')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable(),
+                    // ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable(),
+                    // ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

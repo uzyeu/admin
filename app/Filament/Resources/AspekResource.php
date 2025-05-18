@@ -17,13 +17,31 @@ class AspekResource extends Resource
 {
     protected static ?string $model = Aspek::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static ?string $navigationGroup = 'Aspek';
+    // protected static ?int $navigationSort = 5; 
+    // protected static ?string $navigationLabel = 'Berita Tentang SPBE';
+
+    // protected static ?string $navigationGroup = 'Berita Tentang SPBE'; ini untuk navigasi grup
+    // protected static ?string $pluralLabel = 'Daftar Aspek SPBE';
+    // protected static ?string $navigationLabel = 'Daftar Aspek SPBE';
+    // protected static ?string $pluralModelLabel = 'Daftar Indikator';
+    // protected static ?string $singularLabel = 'Daftar Indikator';
+    // protected static ?string $singularModelLabel = 'Daftar Indikator';
+
+    protected static ?string $modelLabel = 'Aspek SPBE';
+    protected static ?string $pluralModelLabel = 'Daftar Aspek SPBE';
+
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('nama_aspek')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('urutan_aspek')
+                    ->required(),
             ]);
     }
 
@@ -31,7 +49,19 @@ class AspekResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('nama_aspek')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('urutan_aspek')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

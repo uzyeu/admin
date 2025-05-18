@@ -8,7 +8,7 @@ use App\Models\EvaluasiTahun;
 class GrafikIndeksSPBE extends LineChartWidget
 {
     protected static ?string $heading = 'Grafik Indeks SPBE';
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 2;
     protected static string $chartId = 'grafik-indeks-spbe';
 
     protected function getData(): array

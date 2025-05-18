@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class EvaluasiTahun extends Model
 {
     //
+    protected $primaryKey = 'tahun';
+    public $incrementing = false;
     protected $fillable = [
         'tahun',
         'indeks_akumulasi'
@@ -18,6 +20,7 @@ class EvaluasiTahun extends Model
     {
         return $this->hasMany(InformasiIndikator::class, 'tahun', 'tahun');
     }
+
 
     /**
      * Relationship with informasi aspeks
