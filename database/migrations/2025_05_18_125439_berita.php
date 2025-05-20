@@ -14,10 +14,11 @@ return new class extends Migration
         //
         Schema::create('beritas', function (Blueprint $table) {
             $table->id();
-            $table->string('judul')->nullable(); // Judul berita (diambil otomatis)
+            $table->string('judul'); // Judul berita (diambil otomatis)
+            $table->string('slug')->unique();
             $table->string('gambar')->nullable(); // Thumbnail URL (diambil otomatis)
-            $table->text('isi_konten')->nullable(); 
-            $table->string('author')->nullable(); // Deskripsi berita (diambil otomatis)
+            $table->text('isi_konten'); 
+            $table->string('author'); // Deskripsi berita (diambil otomatis)
             $table->timestamps();
         });
     }

@@ -24,6 +24,10 @@ class Indikator extends Model
     {
         return $this->hasMany(DokumenPendukung::class, 'indikator_id');
     }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'dinas_indikators');
+    }
 
     // Relationship with aspek
     public function aspek(): BelongsTo

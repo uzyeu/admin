@@ -6,7 +6,9 @@ use App\Filament\Resources\BeritaResource\Pages;
 use App\Filament\Resources\BeritaResource\RelationManagers;
 use App\Models\Berita;
 use Filament\Forms;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Form;
+use Illuminate\Support\Str;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -28,14 +30,19 @@ class BeritaResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('judul')
-                    ->maxLength(255),
+                    ->required()
+                    ->live(debounce: 500)
+                    ->afterStateUpdated(fn ($state, $set) => $set('slug', Str::slug($state))),
+                Forms\Components\TextInput::make('slug')->disabled()->unique(),
                 Forms\Components\FileUpload::make('gambar')
                     ->image()
                     ->imageEditor(),
-                Forms\Components\Textarea::make('isi_konten')
-                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('author')
+                    ->required()
                     ->maxLength(255),
+                Forms\Components\RichEditor::make('isi_konten')
+                    ->required()
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -44,6 +51,8 @@ class BeritaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('judul')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('gambar'),
                 Tables\Columns\TextColumn::make('author')

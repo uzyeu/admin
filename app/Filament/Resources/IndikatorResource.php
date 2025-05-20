@@ -6,6 +6,7 @@ use App\Filament\Resources\IndikatorResource\Pages;
 use App\Filament\Resources\IndikatorResource\RelationManagers;
 use App\Models\Indikator;
 use Filament\Forms;
+use App\Filament\Resources\IndikatorResource\Pages\{ViewIndikator, EditIndikator, ListIndikators, CreateIndikator};
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -40,7 +41,7 @@ class IndikatorResource extends Resource
                 Forms\Components\TextInput::make('nama_indikator')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('deskripsi')
+                Forms\Components\RichEditor::make('deskripsi')
                     ->columnSpanFull(),
                 Forms\Components\Select::make('aspek_id')
                     ->relationship('aspek', 'id')
@@ -73,6 +74,7 @@ class IndikatorResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -94,6 +96,7 @@ class IndikatorResource extends Resource
         return [
             'index' => Pages\ListIndikators::route('/'),
             'create' => Pages\CreateIndikator::route('/create'),
+            'view' => ViewIndikator::route('/{record}'), 
             'edit' => Pages\EditIndikator::route('/{record}/edit'),
         ];
     }

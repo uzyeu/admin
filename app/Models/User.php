@@ -57,6 +57,11 @@ class User extends Authenticatable
             'indikator_id'          // Related key on pivot table
         );
     }
+
+//     public function indikators()
+// {
+//     return $this->belongsToMany(Indikator::class);
+// }
     
     public function dokumenPendukungs()
     {
@@ -66,4 +71,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(InformasiIndikator::class, 'user_id');
     }
+
 }
