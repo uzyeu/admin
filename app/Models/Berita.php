@@ -15,7 +15,7 @@ class Berita extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom('judul')
             ->saveSlugsTo('slug');
     }
     

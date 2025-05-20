@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DokumenPendukung extends Model
 {
     protected $fillable = [
-        'file_path',
+        'attachment',
         'user_id',
         'indikator_id',
         'tahun',
         'nama_file',
-        'ukuran',
-        'jenis_dokumen'
+        // 'ukuran',
+        // 'jenis_dokumen'
     ];
 
     public function indikator(): BelongsTo

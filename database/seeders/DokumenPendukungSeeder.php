@@ -46,9 +46,9 @@ class DokumenPendukungSeeder extends Seeder
                     'indikator_id' => $indikator->id,
                     'tahun' => $tahun,
                     'nama_file' => 'Dokumen ' . $i . ' - ' . $indikator->nama_indikator,
-                    'file_path' => 'storage/dokumen/indikator_' . $indikator->id . '_' . $i . '.pdf',
-                    'jenis_dokumen' => 'pdf',
-                    'ukuran' => rand(100, 5000), // 100KB - 5MB
+                    'attachment' => 'storage/dokumen/indikator_' . $indikator->id . '_' . $i . '.pdf',
+                    // 'jenis_dokumen' => 'pdf',
+                    // 'ukuran' => rand(100, 5000), // 100KB - 5MB
                 ]);
             }
 

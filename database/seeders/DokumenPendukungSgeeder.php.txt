@@ -1,0 +1,89 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\DokumenPendukung;
+use App\Models\InformasiIndikator;
+use App\Models\Indikator;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
+class DokumenPendukungSeeder extends Seeder
+{
+    public function run()
+    {
+        // Nonaktifkan FK dan bersihkan data sebelumnya
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DokumenPendukung::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $tahun = now()->year;
+        $indikators = Indikator::all();
+
+        // Pastikan direktori ada
+        if (!Storage::exists('public/dokumen-pendukung')) {
+            Storage::makeDirectory('public/dokumen-pendukung');
+        }
+
+        foreach ($indikators as $indikator) {
+            // Ambil dinas penanggung jawab
+            $dinas = $indikator->dinas()->first() 
+                   ?? User::where('role', 'admin_dinas')->inRandomOrder()->first();
+
+            // Buat atau update informasi indikator
+            $infoIndikator = InformasiIndikator::updateOrCreate(
+                [
+                    'indikator_id' => $indikator->id,
+                    'tahun' => $tahun,
+                    'user_id' => $dinas->id
+                ],
+                [
+                    'indeks' => $this->calculateIndeks($indikator->id),
+                    'jumlah_dokumen' => 0,
+                    'is_updated' => false
+                ]
+            );
+
+            // Simulasi pembuatan dokumen pendukung (1 entri, multiple attachment)
+            $jumlahDokumen = rand(1, 3);
+            $attachmentPaths = [];
+
+            for ($i = 1; $i <= $jumlahDokumen; $i++) {
+                $filename = 'indikator_' . $indikator->id . '_' . $tahun . '_' . uniqid() . '.pdf';
+                $path = 'dokumen-pendukung/' . $filename;
+
+                // Simpan file dummy
+                Storage::put('public/' . $path, 'This is a dummy PDF content');
+
+                $attachmentPaths[] = $path;
+            }
+
+            // Buat 1 record dengan multiple attachment
+            DokumenPendukung::create([
+                'user_id' => $dinas->id,
+                'indikator_id' => $indikator->id,
+                'tahun' => $tahun,
+                'nama_file' => 'Dokumen Pendukung - ' . $indikator->nama_indikator,
+                'attachment' => $attachmentPaths,
+            ]);
+
+            // Update info indikator
+            $infoIndikator->update([
+                'jumlah_dokumen' => $jumlahDokumen,
+                'is_updated' => $jumlahDokumen > 0,
+            ]);
+        }
+    }
+
+    private function calculateIndeks($indikatorId)
+    {
+        return match (true) {
+            $indikatorId <= 10 => rand(80, 95),   // Kebijakan
+            $indikatorId <= 20 => rand(75, 85),   // Tata Kelola
+            $indikatorId <= 30 => rand(70, 80),   // Layanan
+            default            => rand(65, 75),   // Teknis
+        };
+    }
+}

@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('beritas', function (Blueprint $table) {
             $table->id();
             $table->string('judul'); // Judul berita (diambil otomatis)
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->nullable();
             $table->string('gambar')->nullable(); // Thumbnail URL (diambil otomatis)
             $table->text('isi_konten'); 
             $table->string('author'); // Deskripsi berita (diambil otomatis)

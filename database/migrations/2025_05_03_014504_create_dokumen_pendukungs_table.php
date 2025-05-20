@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('dokumen_pendukungs', function (Blueprint $table) {
             $table->id(); // Tambahkan ID sebagai primary key
             $table->string('nama_file');
-            $table->string('file_path');
+            $table->string('attachment');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('jenis_dokumen')->nullable();
-            $table->unsignedBigInteger('ukuran')->comment('Dalam bytes');
-            // $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            // $table->string('jenis_dokumen')->nullable();
+            // $table->unsignedBigInteger('ukuran')->comment('Dalam bytes');
             $table->foreignId('indikator_id')->constrained()->onDelete('cascade');
-            // $table->year('tahun')->constrained('evaluasi_tahuns', 'tahun')->cascadeOnDelete();
             $table->year('tahun');
             $table->foreign('tahun')
                 ->references('tahun')
