@@ -42,13 +42,14 @@ class InformasiAspekResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('indeks')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('tahun'),
                 Tables\Columns\TextColumn::make('aspek.id')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('indeks')
+                    ->numeric()
+                    ->sortable(),
+                
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
