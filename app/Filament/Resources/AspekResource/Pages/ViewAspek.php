@@ -39,6 +39,8 @@ class ViewAspek extends ViewRecord
                     ]),
 
                 Section::make('Indikator Terkait')
+                    ->collapsible() // ini membuat section bisa di-expand/collapse
+                    ->collapsed() 
             
                 
             ->schema([
@@ -47,6 +49,7 @@ class ViewAspek extends ViewRecord
                     ->schema([
                         // Urutan & Nama Indikator horizontal (2 kolom)
                         \Filament\Infolists\Components\Grid::make(2)
+                        
                             ->schema([
                                 TextEntry::make('urutan_indikator')->label('Urutan Indikator'),
                                 TextEntry::make('nama_indikator')->label('Nama Indikator'),

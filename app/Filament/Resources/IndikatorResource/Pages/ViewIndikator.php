@@ -36,6 +36,8 @@ class ViewIndikator extends ViewRecord
                         TextEntry::make('aspek.nama_aspek')->label('Aspek Terkait'),
                     ]),
                 Section::make('Deskripsi')
+                    ->collapsible() // ini membuat section bisa di-expand/collapse
+                    ->collapsed() 
                     ->schema([
                         TextEntry::make('deskripsi')->label('')->columnSpanFull(),
                     ]),
