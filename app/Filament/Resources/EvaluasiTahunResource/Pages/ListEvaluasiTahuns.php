@@ -5,6 +5,8 @@ namespace App\Filament\Resources\EvaluasiTahunResource\Pages;
 use App\Filament\Resources\EvaluasiTahunResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Widgets\GrafikIndeksSPBEdiresource;
+
 
 class ListEvaluasiTahuns extends ListRecords
 {
@@ -19,5 +21,11 @@ class ListEvaluasiTahuns extends ListRecords
     public function getBreadcrumb(): string
     {
         return 'Daftar'; // Gantilah dengan teks yang kamu inginkan
+    }
+        protected function getHeaderWidgets(): array
+    {
+        return [
+            GrafikIndeksSPBEdiresource::class,
+        ];
     }
 }

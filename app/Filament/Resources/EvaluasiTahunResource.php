@@ -8,6 +8,7 @@ use App\Models\EvaluasiTahun;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use App\Filament\Widgets\GrafikIndeksSPBEdiresource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -69,6 +70,12 @@ class EvaluasiTahunResource extends Resource
     {
         return [
             //
+        ];
+    }
+        public static function getWidgets(): array
+    {
+        return [
+            GrafikIndeksSPBEdiresource::class,
         ];
     }
 
