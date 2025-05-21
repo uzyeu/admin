@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
         // Super Admin
         User::create([
             'name' => 'Pak Joko',
-            'email' => 'jokoadmin@gmail.com',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
             'role' => 'super_admin',
         ]);
