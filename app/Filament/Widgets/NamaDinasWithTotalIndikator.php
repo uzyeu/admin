@@ -26,7 +26,7 @@ class NamaDinasWithTotalIndikator extends BaseWidget
         return $table
             ->query(
                 User::query()
-                    ->where('role', 'admin_dinas')
+                    // ->where('role', 'admin_dinas')
                     ->withCount(['indikators as total_indikators'])
                     ->withCount([
                         'indikators as updated_indikators' => function(Builder $query) use ($latestYear) {

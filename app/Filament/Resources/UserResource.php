@@ -7,6 +7,7 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -35,8 +36,13 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),   
                 // Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('role')
+                Select::make('roles')
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->preload()
                     ->required(),
+                // Forms\Components\TextInput::make('roles')
+                //     ->required(),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
@@ -57,7 +63,7 @@ class UserResource extends Resource
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime()
                 //     ->sortable(),
-                Tables\Columns\TextColumn::make('role'),
+                Tables\Columns\TextColumn::make('roles.name')->label('Roles'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
