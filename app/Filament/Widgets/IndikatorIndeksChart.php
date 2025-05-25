@@ -4,27 +4,37 @@ namespace App\Filament\Widgets;
 
 use App\Models\Indikator;
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class IndikatorIndeksChart extends ChartWidget
 {
-    protected static ?string $heading = 'Indeks Indikator Tahun 2024';
+    use InteractsWithPageFilters;
+
     protected static ?int $sort = 7;
     protected int|string|array $columnSpan = 'full';
 
+    public function getHeading(): ?string
+    {
+        $tahun = $this->filters['tahun'] ?? date('Y');
+        return "Indeks Indikator Tahun $tahun";
+    }
+
     protected function getData(): array
     {
+        $tahun = $this->filters['tahun'] ?? date('Y');
+
         $indikators = Indikator::orderBy('urutan_indikator')
-            ->with(['informasiIndikators' => fn($q) => $q->where('tahun', 2024)])
+            ->with(['informasiIndikators' => fn($q) => $q->where('tahun', $tahun)])
             ->get();
 
         $labels = [];
         $data = [];
-        $tooltips = []; // Untuk menyimpan nama lengkap
+        $tooltips = [];
 
         foreach ($indikators as $indikator) {
-            $labels[] = 'Indikator ' . $indikator->urutan_indikator; // Format: "Indikator 1"
-            $tooltips[] = $indikator->nama_indikator; // Simpan nama lengkap
-            
+            $labels[] = 'Indikator ' . $indikator->urutan_indikator;
+            $tooltips[] = $indikator->nama_indikator;
+
             $indeks = $indikator->informasiIndikators->first()?->indeks ?? 0;
             $data[] = is_numeric($indeks) ? (float) $indeks : 0;
         }
@@ -38,7 +48,8 @@ class IndikatorIndeksChart extends ChartWidget
                     'backgroundColor' => '#3b82f6',
                     'borderColor' => '#1d4ed8',
                     'borderWidth' => 1,
-                    'tooltips' => $tooltips, // Untuk tooltip
+                    // 'tooltips' is not natively supported like this,
+                    // you can handle tooltip customization in JS via getOptions
                 ],
             ],
         ];
@@ -52,6 +63,19 @@ class IndikatorIndeksChart extends ChartWidget
     protected function getOptions(): array
     {
         return [
+            'responsive' => true,
+            'plugins' => [
+                'tooltip' => [
+                    'callbacks' => [
+                        'title' => 'function(tooltipItems) {
+                            return tooltipItems[0].label;
+                        }',
+                        'label' => 'function(tooltipItem) {
+                            return "Indeks: " + tooltipItem.raw;
+                        }'
+                    ]
+                ],
+            ],
             'scales' => [
                 'y' => [
                     'beginAtZero' => true,

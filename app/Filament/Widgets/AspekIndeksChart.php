@@ -4,27 +4,38 @@ namespace App\Filament\Widgets;
 
 use App\Models\Aspek;
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+
 
 class AspekIndeksChart extends ChartWidget
 {
-    protected static ?string $heading = 'Indeks Aspek Tahun 2024';
-    protected static ?int $sort = 4;
-    // protected static ?string $maxHeight = '300px';
+    use InteractsWithPageFilters;
+    protected static bool $hasPageFilters = true;
 
-    // protected int|string|array $columnSpan = 'full';
+
+    protected static ?string $heading = null;
+    
+
+    public function getHeading(): ?string
+    {
+        $tahun = $this->filters['tahun'] ?? date('Y');
+        return "Indeks Aspek Tahun $tahun";
+    }
+
+    protected static ?int $sort = 4;
 
     protected function getData(): array
     {
+        $tahun = $this->filters['tahun'] ?? date('Y');
         $aspeks = Aspek::orderBy('urutan_aspek')
-            ->with(['informasiAspeks' => fn($q) => $q->where('tahun', 2024)])
+            ->with(['informasiAspeks' => fn($q) => $q->where('tahun', $tahun)])
             ->get();
 
         $labels = [];
         $data = [];
 
         foreach ($aspeks as $aspek) {
-            $labels[] = 'Aspek ' . $aspek->id; // Hanya menampilkan ID di sumbu X
-            
+            $labels[] = 'Aspek ' . $aspek->id;
             $indeks = $aspek->informasiAspeks->first()?->indeks ?? 0;
             $data[] = is_numeric($indeks) ? (float) $indeks : 0;
         }
@@ -51,7 +62,7 @@ class AspekIndeksChart extends ChartWidget
     protected function getOptions(): array
     {
         $maxValue = max($this->getData()['datasets'][0]['data'] ?? [0]) + 1;
-        $maxValue = max($maxValue, 5); 
+        $maxValue = max($maxValue, 5);
 
         return [
             'scales' => [
