@@ -13,6 +13,8 @@ use Filament\Notifications\Notification;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class InformasiIndikatorResource extends Resource
@@ -26,6 +28,22 @@ class InformasiIndikatorResource extends Resource
     protected static ?string $pluralLabel = 'Detail Informasi Indikator SPBE';
 
     protected static ?string $navigationLabel = 'Detail Informasi Indikator SPBE';
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        // Jika super admin (nama_dinas null), tampilkan semua
+        if (is_null($user->nama_dinas)) {
+            return $query;
+        }
+
+        // Ambil ID indikator yang menjadi tanggung jawab user
+        $userIndikatorIds = $user->indikators()->pluck('indikator_id');
+
+        // Filter hanya informasi indikator dengan indikator_id yang dimiliki user
+        return $query->whereIn('indikator_id', $userIndikatorIds);
+    }
 
     public static function form(Form $form): Form
     {
@@ -61,8 +79,9 @@ class InformasiIndikatorResource extends Resource
                 Tables\Columns\TextColumn::make('indikator.id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('user.nama_dinas')
+                    ->label('Nama Dinas')
+                    // ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('jumlah_dokumen')
                     ->numeric()
@@ -98,6 +117,7 @@ class InformasiIndikatorResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -120,6 +140,8 @@ class InformasiIndikatorResource extends Resource
             'index' => Pages\ListInformasiIndikators::route('/'),
             'create' => Pages\CreateInformasiIndikator::route('/create'),
             'edit' => Pages\EditInformasiIndikator::route('/{record}/edit'),
+            'view' => Pages\ViewInformasiIndikator::route('/{record}'),
+
         ];
     }
 }
