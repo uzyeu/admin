@@ -12,7 +12,10 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+// use Filament\Resources\Resource;
+// use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class IndikatorResource extends Resource
 {
@@ -29,6 +32,21 @@ class IndikatorResource extends Resource
 
     protected static ?string $navigationLabel = 'Daftar Indikator SPBE';
     protected static ?string $pluralLabel = 'Daftar Indikator SPBE';
+        public static function getEloquentQuery(): Builder
+    {
+        $user = Auth::user();
+
+        // Super Admin: bisa lihat semua indikator
+        if (is_null($user->nama_dinas)) {
+            return parent::getEloquentQuery();
+        }
+
+        // Admin Dinas: hanya indikator yang ada di tabel pivot
+        return parent::getEloquentQuery()
+            ->whereHas('users', function (Builder $query) use ($user) {
+                $query->where('user_id', $user->id);
+            });
+    }
 
 
     public static function form(Form $form): Form

@@ -37,7 +37,7 @@ class UserResource extends Resource
                     ->maxLength(255),   
                 // Forms\Components\DateTimePicker::make('email_verified_at'),
                 Select::make('roles')
-                    ->multiple()
+                    // ->multiple()
                     ->relationship('roles', 'name')
                     ->preload()
                     ->required(),
