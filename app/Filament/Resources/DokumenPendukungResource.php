@@ -15,6 +15,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class DokumenPendukungResource extends Resource
 {
@@ -25,6 +26,22 @@ class DokumenPendukungResource extends Resource
     protected static ?string $pluralLabel = 'Database Dokumen Pendukung';
 
     protected static ?string $navigationLabel = 'Database Dokumen Pendukung';
+    public static function getEloquentQuery(): Builder
+{
+    $query = parent::getEloquentQuery();
+    $user = Auth::user();
+
+    // Jika super admin (misal: punya akses ke semua indikator), tampilkan semua
+    if ($user->is_super_admin ?? false) {
+        return $query;
+    }
+
+    // Ambil ID indikator yang menjadi tanggung jawab user
+    $userIndikatorIds = $user->indikators()->pluck('indikators.id');
+
+    // Filter hanya dokumen dengan indikator_id yang dimiliki user
+    return $query->whereIn('indikator_id', $userIndikatorIds);
+}
 
 
     public static function form(Form $form): Form
@@ -48,9 +65,18 @@ class DokumenPendukungResource extends Resource
                     ]),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
+                    ->default(\Illuminate\Support\Facades\Auth::user()?->id)
+                    ->disabled()
+                    ->dehydrated() // Tetap disimpan saat submit meskipun disabled
                     ->required(),
-                Forms\Components\Select::make('indikator_id')
-                    ->relationship('indikator', 'id')
+               Forms\Components\Select::make('indikator_id')
+                    ->label('Indikator')
+                    ->options(function () {
+                        $user = \Illuminate\Support\Facades\Auth::user();
+                        if (!$user) return [];
+                        // Ambil indikator yang menjadi wewenang user
+                        return $user->indikators()->pluck('nama_indikator', 'indikators.id');
+                    })
                     ->required(),
                 Forms\Components\TextInput::make('tahun')
                     ->required(),
