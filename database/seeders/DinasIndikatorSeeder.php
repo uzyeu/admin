@@ -10,6 +10,13 @@ class DinasIndikatorSeeder extends Seeder
 {
     public function run()
     {
+
+        $user = User::find(1);
+        
+        if ($user) {
+            $user->indikators()->sync(range(1, 47));
+        }
+
         $dinasKominfo = User::where('nama_dinas', 'Dinas Kominfo')->first();
         $dinasSetdako = User::where('nama_dinas', 'Dinas Setdako')->first();
         $dinasInspektorat = User::where('nama_dinas', 'Dinas Inspektorat')->first();

@@ -23,7 +23,7 @@ class DokumenPendukungResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
     protected static ?string $navigationGroup = 'Lainnya';
-    protected static ?string $pluralLabel = 'Database Dokumen Pendukung';
+    protected static ?string $pluralLabel = 'Daftar Dokumen Pendukung';
 
     protected static ?string $navigationLabel = 'Database Dokumen Pendukung';
     public static function getEloquentQuery(): Builder
