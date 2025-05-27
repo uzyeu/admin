@@ -45,6 +45,7 @@ class ViewIndikator extends ViewRecord
                 Section::make('Dinas yang Menaungi')
                     ->schema([
                         RepeatableEntry::make('users')
+                            ->getStateUsing(fn ($record) => $record->users->unique('nama_dinas')->values())
                             ->schema([
                                 TextEntry::make('nama_dinas')->label('Nama Dinas'),
                                 // TextEntry::make('name')->label('Nama User'),

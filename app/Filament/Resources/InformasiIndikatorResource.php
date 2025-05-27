@@ -75,7 +75,8 @@ class InformasiIndikatorResource extends Resource
                 Tables\Columns\TextColumn::make('indeks')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('tahun'),
+                Tables\Columns\TextColumn::make('tahun')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('indikator.id')
                     ->numeric()
                     ->sortable(),
