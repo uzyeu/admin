@@ -17,6 +17,15 @@ class InformasiIndikator extends Model
         'jumlah_dokumen',
         'is_updated'
     ];
+    protected static function booted(): void
+    {
+        static::saving(function (self $model) {
+            // Update nilai is_updated berdasarkan keberadaan dokumen pendukung
+            $model->is_updated = DokumenPendukung::where('indikator_id', $model->indikator_id)
+                ->where('tahun', $model->tahun)
+                ->exists();
+        });
+    }
 
     protected $casts = [
         'is_updated' => 'boolean'

@@ -49,22 +49,22 @@ class InformasiIndikatorResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('indeks')
-                    ->numeric(),
-                Forms\Components\TextInput::make('tahun')
-                    ->required(),
                 Forms\Components\Select::make('indikator_id')
                     ->relationship('indikator', 'id')
                     ->required(),
+                Forms\Components\TextInput::make('tahun')
+                    ->required(),
+                Forms\Components\TextInput::make('indeks')
+                    ->numeric(),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->required(),
-                Forms\Components\TextInput::make('jumlah_dokumen')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\Toggle::make('is_updated')
-                    ->required(),
+                // Forms\Components\TextInput::make('jumlah_dokumen')
+                //     ->required()
+                //     ->numeric()
+                //     ->default(0),
+                // Forms\Components\Toggle::make('is_updated')
+                //     ->required(),
             ]);
     }
 
@@ -72,39 +72,32 @@ class InformasiIndikatorResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('indeks')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('tahun')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('indikator.id')
+                    ->searchable()
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('indeks')
+                    ->searchable()
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.nama_dinas')
+                    ->searchable()
                     ->label('Nama Dinas')
                     // ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('jumlah_dokumen')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\ToggleColumn::make('is_updated')
-                    ->updateStateUsing(function (Model $record, $state) {
-                        try {
-                            $record->update(['is_updated' => $state]);
-                            
-                            Notification::make()
-                                ->title('Status update berhasil diubah')
-                                ->success()
-                                ->send();
-                        } catch (\Exception $e) {
-                            Notification::make()
-                                ->title('Gagal mengubah status')
-                                ->danger()
-                                ->send();
-                            
-                            throw $e;
-                        }
-                    }),
+                // Tables\Columns\TextColumn::make('jumlah_dokumen')
+                //     ->numeric()
+                //     ->sortable(),
+                Tables\Columns\IconColumn::make('is_updated')
+                    ->label('Status')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
