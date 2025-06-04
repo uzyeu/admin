@@ -20,6 +20,8 @@ class EvaluasiTahunResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
     protected static ?string $navigationGroup = 'Lainnya';
+        protected static ?int $navigationSort = 2;
+
     protected static ?string $pluralLabel = 'Riwayat Evaluasi SPBE';
 
     protected static ?string $navigationLabel = 'Riwayat Evaluasi SPBE';

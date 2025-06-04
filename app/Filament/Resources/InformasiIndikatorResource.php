@@ -83,11 +83,11 @@ class InformasiIndikatorResource extends Resource
                     ->searchable()
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.nama_dinas')
-                    ->searchable()
-                    ->label('Nama Dinas')
-                    // ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('user.nama_dinas')
+                //     ->searchable()
+                //     ->label('Nama Dinas')
+                //     // ->numeric()
+                //     ->sortable(),
                 // Tables\Columns\TextColumn::make('jumlah_dokumen')
                 //     ->numeric()
                 //     ->sortable(),

@@ -21,6 +21,8 @@ class BeritaResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Lainnya';
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $pluralLabel = 'Daftar Berita SPBE';
 
     protected static ?string $navigationLabel = 'Daftar Berita SPBE';

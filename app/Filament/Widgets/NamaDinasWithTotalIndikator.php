@@ -7,9 +7,12 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
+
 
 class NamaDinasWithTotalIndikator extends BaseWidget
 {
+    use HasWidgetShield;
     protected int | string | array $columnSpan = 'full';
     protected static ?string $heading = 'Daftar Dinas dan Status Indikator';
     protected static ?int $sort = 1;

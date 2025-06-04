@@ -5,11 +5,15 @@ namespace App\Filament\Widgets;
 use App\Models\Aspek;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
+
 
 
 class AspekIndeksChart extends ChartWidget
 {
     use InteractsWithPageFilters;
+        use HasWidgetShield;
+
     protected static bool $hasPageFilters = true;
 
 

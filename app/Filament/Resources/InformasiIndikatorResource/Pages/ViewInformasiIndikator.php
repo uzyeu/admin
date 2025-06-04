@@ -25,9 +25,10 @@ class ViewInformasiIndikator extends ViewRecord
                             TextEntry::make('tahun'),
                             TextEntry::make('jumlah_dokumen'),
                             TextEntry::make('is_updated')
+                                ->label('Status')
                                 ->formatStateUsing(fn ($state) => $state ? 'Sudah Diperbarui' : 'Belum'),
                         ]),
-                        TextEntry::make('user.name')->label('Diinput oleh'),
+                        TextEntry::make('user.name')->label('Terakhir diperbarui oleh'),
                         TextEntry::make('indikator.nama_indikator')->label('Nama Indikator'),
                     ]),
 

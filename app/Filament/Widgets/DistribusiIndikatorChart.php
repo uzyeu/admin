@@ -6,6 +6,7 @@ use App\Models\Indikator;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
+
 class DistribusiIndikatorChart extends ChartWidget
 {
     use InteractsWithPageFilters;
