@@ -42,6 +42,7 @@ class EvaluasiTahunResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tahun')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('indeks_akumulasi')
                     ->numeric()

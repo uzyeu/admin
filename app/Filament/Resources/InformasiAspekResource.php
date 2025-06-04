@@ -42,9 +42,11 @@ class InformasiAspekResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('tahun'),
+                Tables\Columns\TextColumn::make('tahun')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('aspek.id')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('indeks')
                     ->numeric()

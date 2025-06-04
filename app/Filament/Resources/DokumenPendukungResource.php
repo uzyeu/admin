@@ -5,6 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DokumenPendukungResource\Pages;
 use App\Filament\Resources\DokumenPendukungResource\RelationManagers;
 use App\Models\DokumenPendukung;
+use Filament\Actions\Action;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
+use Illuminate\Support\Str;
 use Filament\Forms;
 use App\Filament\Resources\AspekResource\Pages\{ViewADokumenPendukung, EditADokumenPendukung, ListADokumenPendukungs, CreateADokumenPendukung};
 use Filament\Forms\Form;
@@ -37,6 +41,7 @@ class DokumenPendukungResource extends Resource
     if ($user->is_super_admin ?? false) {
         return $query;
     }
+    
 
     // Ambil ID indikator yang menjadi tanggung jawab user
     $userIndikatorIds = $user->indikators()->pluck('indikators.id');
@@ -88,8 +93,57 @@ class DokumenPendukungResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            // ->headerActions([
+            // Action::make('downloadAll')
+            //     ->label('Download Semua Dokumen')
+            //     ->form([
+            //         Forms\Components\Select::make('tahun')
+            //             ->label('Pilih Tahun')
+            //             ->options(
+            //                 \App\Models\EvaluasiTahun::pluck('tahun', 'tahun') // menyesuaikan relasi tahun
+            //             )
+            //             ->required(),
+            //     ])
+            //     ->action(function (array $data) {
+            //         $tahun = $data['tahun'];
+            //         $zipFileName = "dokumen-pendukung-{$tahun}-" . Str::random(5) . ".zip";
+            //         $zipFilePath = storage_path("app/temp/{$zipFileName}");
+
+            //         if (!file_exists(storage_path('app/temp'))) {
+            //             mkdir(storage_path('app/temp'), 0777, true);
+            //         }
+
+            //         $zip = new ZipArchive();
+            //         if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+            //             $dokumens = \App\Models\DokumenPendukung::where('tahun', $tahun)->get();
+
+            //             foreach ($dokumens as $dokumen) {
+            //                 $indikator = $dokumen->indikator_id;
+            //                 $path = storage_path("app/" . $dokumen->attachment);
+
+            //                 if (file_exists($path)) {
+            //                     $zip->addFile($path, "Indikator-{$indikator}/" . basename($path));
+            //                 }
+            //             }
+
+            //             $zip->close();
+
+            //             return response()->download($zipFilePath)->deleteFileAfterSend(true);
+            //         }
+
+            //         throw new \Exception("Gagal membuat arsip ZIP");
+            //     }),
+            // ])
             ->columns([
+                Tables\Columns\TextColumn::make('tahun')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('indikator.id')
+                    ->numeric()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('nama_file')
+                    ->searchable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('attachment')
                     ->label('File')
@@ -100,16 +154,12 @@ class DokumenPendukungResource extends Resource
                         'class' => 'text-primary-500 hover:underline',
                         'download' => basename($record->attachment)
                      ]),               
-                Tables\Columns\TextColumn::make('user.name')
-                    ->label('Dinas')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('user.name')
+                //     ->label('Dinas')
+                //     ->numeric()
+                //     ->sortable(),
 
-                Tables\Columns\TextColumn::make('indikator.id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('tahun')
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

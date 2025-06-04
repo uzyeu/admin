@@ -53,6 +53,7 @@ class AspekResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('urutan_aspek')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nama_aspek')
                     ->searchable(),

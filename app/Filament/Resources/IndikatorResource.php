@@ -73,11 +73,13 @@ class IndikatorResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('urutan_indikator')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nama_indikator')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('aspek.id')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

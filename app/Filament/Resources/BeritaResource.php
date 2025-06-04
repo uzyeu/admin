@@ -10,6 +10,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Form;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
+
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,6 +27,10 @@ class BeritaResource extends Resource
     protected static ?string $pluralLabel = 'Daftar Berita SPBE';
 
     protected static ?string $navigationLabel = 'Daftar Berita SPBE';
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()->orderByDesc('created_at');
+}
 
     public static function form(Form $form): Form
     {
@@ -63,12 +68,13 @@ class BeritaResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('gambar'),
+                // Tables\Columns\ImageColumn::make('gambar'),
                 Tables\Columns\TextColumn::make('author')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
+                    // ->defaultSort('desc')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
