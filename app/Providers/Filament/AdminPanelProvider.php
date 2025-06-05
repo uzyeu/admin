@@ -8,6 +8,8 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
+use App\Filament\Pages\Settings;
+use Filament\Navigation\MenuItem;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
@@ -23,6 +25,13 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            // ->tenantMenuItems([
+            //     MenuItem::make()
+            //         ->label('Settings')
+            //         ->url(fn (): string => Settings::getUrl())
+            //         ->icon('heroicon-m-cog-8-tooth'),
+            //     // ...
+            // ])
             ->default()
             ->id('admin')
             ->path('admin')

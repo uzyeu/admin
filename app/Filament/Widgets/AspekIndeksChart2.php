@@ -4,11 +4,15 @@ namespace App\Filament\Widgets;
 
 use App\Models\Aspek;
 use Filament\Widgets\ChartWidget;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
+
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class AspekIndeksChart2 extends ChartWidget
 {
     use InteractsWithPageFilters;
+    use HasWidgetShield;
+
 
     protected static ?string $heading = null; // Nanti kita generate berdasarkan tahun
     protected static ?int $sort = 6;

@@ -4,11 +4,14 @@ namespace App\Filament\Widgets;
 
 use App\Models\Indikator;
 use Filament\Widgets\ChartWidget;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class IndikatorIndeksChart extends ChartWidget
 {
     use InteractsWithPageFilters;
+    use HasWidgetShield;
+
 
     protected static ?int $sort = 7;
     protected int|string|array $columnSpan = 'full';
