@@ -92,7 +92,7 @@ class InformasiIndikatorResource extends Resource
                 //     ->numeric()
                 //     ->sortable(),
                 Tables\Columns\IconColumn::make('is_updated')
-                    ->label('Status')
+                    ->label('Status Update')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')

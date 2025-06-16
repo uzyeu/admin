@@ -92,6 +92,9 @@ class DokumenPendukungResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('tahun')
                     ->required(),
+                Forms\Components\Toggle::make('status_dokumen')
+                    ->label('Status Verifikasi Dokumen')
+                    ->default(false),   
             ]);
     }
 
@@ -118,8 +121,20 @@ class DokumenPendukungResource extends Resource
                     ->extraAttributes(fn ($record) => [
                         'class' => 'text-primary-500 hover:underline',
                         'download' => basename($record->attachment)
-                     ]),               
-                // Tables\Columns\TextColumn::make('user.name')
+                     ]),      
+                Tables\Columns\IconColumn::make('status_dokumen')
+    ->label('Status')
+    ->boolean()
+    ->trueIcon('heroicon-o-check-circle')
+    ->falseIcon('heroicon-o-x-circle')
+    ->trueColor('success')
+    ->falseColor('danger'),
+
+Tables\Columns\TextColumn::make('status_dokumen_label')
+    ->label('')
+    ->getStateUsing(fn($record) => $record->status_dokumen ? 'Sudah Terverifikasi' : 'Belum Terverifikasi'),
+
+    // Tables\Columns\TextColumn::make('user.name')
                 //     ->label('Dinas')
                 //     ->numeric()
                 //     ->sortable(),
