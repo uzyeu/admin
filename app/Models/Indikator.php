@@ -52,11 +52,53 @@ class Indikator extends Model
     {
         return $this->hasMany(InformasiIndikator::class, 'indikator_id');
     }
+    public function getPrioritasPerbaikanAttribute()
+    {
+        // Ambil data indeks tahun 2024
+        $data2024 = $this->informasiIndikators()
+            ->where('tahun', 2024)
+            ->first();
+
+        // Ambil data indeks tahun 2023
+        $data2023 = $this->informasiIndikators()
+            ->where('tahun', 2023)
+            ->first();
+
+        if (!$data2024 || !$data2023) {
+            return 'Data Kurang';
+        }
+
+        $indeks2024 = $data2024->indeks;
+        $indeks2023 = $data2023->indeks;
+
+        // Aturan sistem pakar sederhana
+        // Aturan sistem pakar berbasis skala 1–5
+        if ($indeks2024 < $indeks2023) {
+            return 'Tinggi';
+        } elseif ($indeks2024 > $indeks2023) {
+            return 'Sedang';
+        } elseif ($indeks2024 == $indeks2023) {
+            return $indeks2024 == 5 ? 'Rendah' : 'Cukup Tinggi';
+        }
+
+        return 'Tidak Diketahui';
+    }
+
 
     // Derivatif manual (jumlah dokumen total)
     public function getJumlahDokumenAttribute()
     {
         return $this->dokumenPendukungs()->count();
+    }
+
+    public function getIndeks2023Attribute()
+    {
+        return $this->informasiIndikators()->where('tahun', 2023)->first()?->indeks ?? null;
+    }
+
+    public function getIndeks2024Attribute()
+    {
+        return $this->informasiIndikators()->where('tahun', 2024)->first()?->indeks ?? null;
     }
 
 }

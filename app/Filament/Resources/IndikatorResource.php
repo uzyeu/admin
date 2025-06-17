@@ -32,7 +32,7 @@ class IndikatorResource extends Resource
 
     protected static ?string $navigationLabel = 'Daftar Indikator SPBE';
     protected static ?string $pluralLabel = 'Daftar Indikator SPBE';
-        public static function getEloquentQuery(): Builder
+    public static function getEloquentQuery(): Builder
     {
         $user = Auth::user();
 
@@ -81,6 +81,19 @@ class IndikatorResource extends Resource
                     ->numeric()
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('indeks_2023')->label('Indeks 2023'),
+                Tables\Columns\TextColumn::make('indeks_2024')->label('Indeks 2024'),
+                Tables\Columns\TextColumn::make('prioritas_perbaikan')
+                    ->label('Prioritas Peningkatan Tahun Selanjutnya')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'Tinggi' => 'danger',
+                        'Cukup Tinggi' => 'warning',
+                        'Sedang' => 'info',
+                        'Rendah' => 'success',
+                        'Data Kurang', 'Tidak Diketahui' => 'gray',
+                        default => 'secondary',
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
