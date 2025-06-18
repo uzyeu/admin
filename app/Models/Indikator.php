@@ -84,6 +84,18 @@ class Indikator extends Model
         return 'Tidak Diketahui';
     }
 
+    public function getPenjelasanSingkatAttribute()
+    {
+        return match ($this->prioritas_perbaikan) {
+            'Tinggi' => 'Terjadi penurunan indeks dari tahun sebelumnya.',
+            'Cukup Tinggi' => 'Indeks tetap, tapi belum maksimal.',
+            'Sedang' => 'Indeks meningkat dari tahun sebelumnya.',
+            'Rendah' => 'Nilai stabil dan sudah maksimal.',
+            'Data Kurang', 'Tidak Diketahui' => 'Belum cukup data untuk dianalisis.',
+            default => '-',
+        };
+    }
+
 
     // Derivatif manual (jumlah dokumen total)
     public function getJumlahDokumenAttribute()

@@ -102,6 +102,11 @@ class IndikatorResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('penjelasan_singkat')
+                    ->label('Penjelasan Singkat')
+                    ->wrap()
+                    ->limit(100)
+                    ->extraAttributes(['class' => 'text-sm text-gray-600']),
             ])
             ->filters([
                 //
