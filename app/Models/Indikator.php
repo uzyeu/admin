@@ -84,17 +84,17 @@ class Indikator extends Model
         return 'Tidak Diketahui';
     }
 
-    public function getPenjelasanSingkatAttribute()
-    {
-        return match ($this->prioritas_perbaikan) {
-            'Tinggi' => 'Terjadi penurunan indeks dari tahun sebelumnya.',
-            'Cukup Tinggi' => 'Indeks tetap, tapi belum maksimal.',
-            'Sedang' => 'Indeks meningkat dari tahun sebelumnya.',
-            'Rendah' => 'Nilai stabil dan sudah maksimal.',
-            'Data Kurang', 'Tidak Diketahui' => 'Belum cukup data untuk dianalisis.',
-            default => '-',
-        };
-    }
+    // public function getPenjelasanSingkatAttribute()
+    // {
+    //     return match ($this->prioritas_perbaikan) {
+    //         'Tinggi' => 'Terjadi penurunan indeks dari tahun sebelumnya.',
+    //         'Cukup Tinggi' => 'Indeks tetap, tapi belum maksimal.',
+    //         'Sedang' => 'Indeks meningkat dari tahun sebelumnya.',
+    //         'Rendah' => 'Nilai stabil dan sudah maksimal.',
+    //         'Data Kurang', 'Tidak Diketahui' => 'Belum cukup data untuk dianalisis.',
+    //         default => '-',
+    //     };
+    // }
 
 
     // Derivatif manual (jumlah dokumen total)
@@ -112,5 +112,47 @@ class Indikator extends Model
     {
         return $this->informasiIndikators()->where('tahun', 2024)->first()?->indeks ?? null;
     }
+    public function getStatusTrenAttribute()
+{
+    $indeks2023 = $this->indeks_2023;
+    $indeks2024 = $this->indeks_2024;
+
+    if (is_null($indeks2023) || is_null($indeks2024)) {
+        return 'Tidak Diketahui';
+    }
+
+    return match (true) {
+        $indeks2024 > $indeks2023 => 'Naik',
+        $indeks2024 < $indeks2023 => 'Menurun',
+        default => 'Tetap',
+    };
+}
+
+public function getStatusDokumenAttribute()
+{
+    $jumlah2023 = $this->dokumenPendukungs()->where('tahun', 2023)->count();
+    $jumlah2024 = $this->dokumenPendukungs()->where('tahun', 2024)->count();
+
+    return match (true) {
+        $jumlah2024 > $jumlah2023 => 'Naik',
+        $jumlah2024 < $jumlah2023 => 'Turun',
+        default => 'Stabil',
+    };
+}
+
+public function getKesimpulanPendampinganAttribute()
+{
+    $prioritas = $this->prioritas_perbaikan;
+    $trenDokumen = $this->status_dokumen;
+
+    return match (true) {
+        $prioritas === 'Tinggi' && $trenDokumen === 'Turun' => 'Perlu Pendampingan',
+        $prioritas === 'Tinggi' && $trenDokumen === 'Naik' => 'Evaluasi Strategi',
+        $prioritas === 'Tinggi' && $trenDokumen === 'Stabil' => 'Evaluasi Strategi',
+        $prioritas === 'Cukup Tinggi' && $trenDokumen === 'Turun' => 'Pendampingan Terbatas',
+        $prioritas === 'Cukup Tinggi' => 'Perlu Monitoring',
+        default => 'Tidak Perlu Pendampingan',
+    };
+}
 
 }

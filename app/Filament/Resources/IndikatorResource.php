@@ -83,8 +83,30 @@ class IndikatorResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('indeks_2023')->label('Indeks 2023'),
                 Tables\Columns\TextColumn::make('indeks_2024')->label('Indeks 2024'),
+                // Tables\Columns\TextColumn::make('prioritas_perbaikan')
+                //     ->label('Prioritas Peningkatan Tahun Selanjutnya')
+                //     ->badge()
+                //     ->color(fn ($state) => match ($state) {
+                //         'Tinggi' => 'danger',
+                //         'Cukup Tinggi' => 'warning',
+                //         'Sedang' => 'info',
+                //         'Rendah' => 'success',
+                //         'Data Kurang', 'Tidak Diketahui' => 'gray',
+                //         default => 'secondary',
+                //     }),
+
+                Tables\Columns\TextColumn::make('status_tren')
+                    ->label('Status Tren Indeks')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'Naik' => 'success',
+                        'Menurun' => 'danger',
+                        'Tetap' => 'warning',
+                        default => 'gray',
+                    }),
+
                 Tables\Columns\TextColumn::make('prioritas_perbaikan')
-                    ->label('Prioritas Peningkatan Tahun Selanjutnya')
+                    ->label('Prioritas Perbaikan')
                     ->badge()
                     ->color(fn ($state) => match ($state) {
                         'Tinggi' => 'danger',
@@ -94,6 +116,28 @@ class IndikatorResource extends Resource
                         'Data Kurang', 'Tidak Diketahui' => 'gray',
                         default => 'secondary',
                     }),
+
+                Tables\Columns\TextColumn::make('status_dokumen')
+                    ->label('Tren Dokumen')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'Naik' => 'success',
+                        'Turun' => 'danger',
+                        'Stabil' => 'warning',
+                        default => 'gray',
+                    }),
+
+                Tables\Columns\TextColumn::make('kesimpulan_pendampingan')
+                    ->label('Evaluasi Akhir')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'Perlu Pendampingan' => 'danger',
+                        'Pendampingan Terbatas' => 'warning',
+                        'Perlu Monitoring' => 'info',
+                        'Evaluasi Strategi' => 'gray',
+                        'Tidak Perlu Pendampingan' => 'success',
+                        default => 'gray',
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -102,11 +146,11 @@ class IndikatorResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('penjelasan_singkat')
-                    ->label('Penjelasan Singkat')
-                    ->wrap()
-                    ->limit(100)
-                    ->extraAttributes(['class' => 'text-sm text-gray-600']),
+                // Tables\Columns\TextColumn::make('penjelasan_singkat')
+                //     ->label('Penjelasan Singkat')
+                //     ->wrap()
+                //     ->limit(100)
+                //     ->extraAttributes(['class' => 'text-sm text-gray-600']),
             ])
             ->filters([
                 //
